@@ -94,12 +94,7 @@ syscall_handler (struct intr_frame *f UNUSED) {
 			    argSt[i] = *ag;
 			}
 
-			void* physPage = pagedir_get_page (curr->pagedir,(const void *)argSt[1]);
-			argSt[1] = (int)physPage;
-			if (physPage == NULL)
-	        {
-	          	syscall_exit(-1);
-	        }
+			argSt[1] = (int)pagedir_get_page (curr->pagedir, (const void *)argSt[1]);
       		f->eax = syscall_write((int)argSt[0], (void*)argSt[1], (unsigned)argSt[2]);
 			break;
 		}
@@ -114,14 +109,6 @@ syscall_handler (struct intr_frame *f UNUSED) {
 			    argSt[i] = *ag;
 			}
 
-			void* physPage = pagedir_get_page (curr->pagedir,(const void *)argSt[0]);
-			argSt[0] = (int)physPage;
-
-			if (physPage == NULL)
-	        {
-	          	syscall_exit(-1);
-	        }
-	        
       		f->eax = syscall_read((int)argSt[0], (void *)argSt[1], (unsigned)argSt[2]);
 			break;
 		}
@@ -135,14 +122,6 @@ syscall_handler (struct intr_frame *f UNUSED) {
 			    pointers_validation(ag);
 			    argSt[i] = *ag;
 			}
-
-			void* physPage = pagedir_get_page (curr->pagedir,(const void *)argSt[0]);
-			argSt[0] = (int)physPage;
-
-			if (physPage == NULL)
-	        {
-	          	syscall_exit(-1);
-	        }
 
 			f->eax = syscall_create((const char*)argSt[0], (unsigned)argSt[1]);
 			break;
